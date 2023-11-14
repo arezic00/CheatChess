@@ -33,6 +33,8 @@ class MainActivity : AppCompatActivity() {
             if (response.isSuccessful && response.body() != null)
                 Log.d("MainActivity", response.body().toString())
             else Log.d("MainActivity", "response not successful")
+
+            //Remove this comment
         }
     }
 }
