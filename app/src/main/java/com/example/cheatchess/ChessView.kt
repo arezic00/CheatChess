@@ -15,10 +15,15 @@ class ChessView(context: Context?, attrs: AttributeSet?) : View(context, attrs) 
 
     override fun onDraw(canvas: Canvas?) {
         super.onDraw(canvas)
-        for (i in 0..7)
-            for (j in 0..7) {
-                paint.color = if ((i + j) % 2 == 0) Color.LTGRAY else Color.GRAY
-                canvas?.drawRect(marginLeft + rectSide*j,marginTop + rectSide*i,marginLeft + rectSide*(j+1),marginTop + rectSide*(i+1),paint)
+        for (row in 0..7)
+            for (col in 0..7) {
+                paint.color = if ((row + col) % 2 == 0) Color.LTGRAY else Color.GRAY
+                canvas?.drawRect(
+                    marginLeft + rectSide*col,
+                    marginTop + rectSide*row,
+                    marginLeft + rectSide*(col+1),
+                    marginTop + rectSide*(row+1),
+                    paint)
             }
 
     }
