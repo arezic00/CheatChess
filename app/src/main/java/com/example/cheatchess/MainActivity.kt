@@ -4,14 +4,20 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import androidx.lifecycle.lifecycleScope
+import com.example.cheatchess.databinding.ActivityMainBinding
 import kotlinx.coroutines.launch
 import okio.IOException
 import retrofit2.HttpException
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), ChessDelegate {
+    private lateinit var binding: ActivityMainBinding
+    override val chessModel = ChessModel()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
+        binding.chessView.chessDelegate = this
 
         lifecycleScope.launch {
             val positionFEN = "r2q1rk1/ppp2ppp/3bbn2/3p4/8/1B1P4/PPP2PPP/RNB1QRK1 w - - 5 11"
