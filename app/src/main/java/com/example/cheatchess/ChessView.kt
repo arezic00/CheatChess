@@ -79,4 +79,6 @@ class ChessView(context: Context?, attrs: AttributeSet?) : View(context, attrs) 
             marginLeft = (canvas.width - boardSide) / 2f
             marginTop = (canvas.height - boardSide) / 2f
     }
+
+    
 }
