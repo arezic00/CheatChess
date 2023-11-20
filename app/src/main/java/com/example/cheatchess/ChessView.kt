@@ -91,6 +91,8 @@ class ChessView(context: Context?, attrs: AttributeSet?) : View(context, attrs) 
                 val row = ((event.y - marginTop) / squareSide).toInt()
                 Log.d("MainActivity", "Up :($row,$col)")
                 chessDelegate?.movePiece(fromRow, fromCol, row, col)
+                fromRow = -1
+                fromCol = -1
             }
         }
         return true
