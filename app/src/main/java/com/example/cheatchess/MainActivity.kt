@@ -34,7 +34,6 @@ class MainActivity : AppCompatActivity() {
                 Log.d("MainActivity", response.body().toString())
             else Log.d("MainActivity", "response not successful")
 
-            //Remove this comment
         }
     }
 }
