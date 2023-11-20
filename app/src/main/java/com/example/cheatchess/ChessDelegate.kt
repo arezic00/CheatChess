@@ -1,5 +1,6 @@
 package com.example.cheatchess
 
 interface ChessDelegate {
-    val chessModel: ChessModel
+    fun pieceAt(row: Int, col: Int) : ChessPiece?
+    fun movePiece(fromRow: Int, fromCol: Int, toRow: Int, toCol: Int)
 }

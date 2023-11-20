@@ -8,6 +8,9 @@ import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.RectF
 import android.util.AttributeSet
+import android.util.Log
+import android.view.DragEvent
+import android.view.MotionEvent
 import android.view.View
 import androidx.core.content.ContextCompat
 import java.lang.Integer.min
@@ -20,6 +23,8 @@ class ChessView(context: Context?, attrs: AttributeSet?) : View(context, attrs) 
     private var marginLeft = 20f
     private var marginTop = 200f
     private val scaleFactor = .95f
+    var fromRow: Int = -1
+    var fromCol: Int = -1
     private val bitmaps = mapOf<Int,Bitmap>(
         Pair(R.drawable.black_rook,BitmapFactory.decodeResource(resources, R.drawable.black_rook)),
         Pair(R.drawable.black_knight,BitmapFactory.decodeResource(resources, R.drawable.black_knight)),
@@ -45,6 +50,27 @@ class ChessView(context: Context?, attrs: AttributeSet?) : View(context, attrs) 
         drawPieces(canvas)
     }
 
+    override fun onTouchEvent(event: MotionEvent?): Boolean {
+        event ?: return  false
+        when (event.action) {
+            MotionEvent.ACTION_DOWN -> {
+                fromCol = ((event.x - marginLeft) / squareSide).toInt()
+                fromRow = ((event.y - marginTop) / squareSide).toInt()
+                Log.d("MainActivity", "Down :($fromRow,$fromCol)")
+            }
+            MotionEvent.ACTION_MOVE -> {
+
+            }
+            MotionEvent.ACTION_UP -> {
+                val col = ((event.x - marginLeft) / squareSide).toInt()
+                val row = ((event.y - marginTop) / squareSide).toInt()
+                Log.d("MainActivity", "Up :($row,$col)")
+                chessDelegate?.movePiece(fromRow,fromCol,row,col)
+            }
+        }
+        return true
+    }
+
     private fun drawBoard(canvas: Canvas) {
         for (row in 0..7)
             for (col in 0..7) {
@@ -57,9 +83,11 @@ class ChessView(context: Context?, attrs: AttributeSet?) : View(context, attrs) 
     }
 
     private fun drawPieces(canvas: Canvas) {
-        chessDelegate?.let {
-            for (piece in it.chessModel.pieces)
-                drawPieceAt(canvas, piece.row, piece.col, bitmaps[piece.resID]!!)
+        chessDelegate?.let { cd ->
+            for (row in 0..7)
+                for (col in 0..7)
+                    cd.pieceAt(row,col)?.let { drawPieceAt(canvas, row, col, bitmaps[it.resID]!!) }
+
         }
     }
 

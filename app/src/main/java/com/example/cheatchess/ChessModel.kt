@@ -1,12 +1,13 @@
 package com.example.cheatchess
 
+import android.util.Log
+
 class ChessModel {
-    val pieces = mutableSetOf<ChessPiece>()
+    private val pieces = mutableSetOf<ChessPiece>()
 
     init {
         setStartingPosition()
-        //This is just an example
-        movePiece(pieceAt(7,4)!!, 0,3)
+        movePiece(7,4,0,4)
     }
 
     fun pieceAt(row: Int, col: Int): ChessPiece? {
@@ -46,9 +47,10 @@ class ChessModel {
         pieces.removeAll(pieces)
     }
 
-    fun movePiece(piece: ChessPiece, toRow: Int, toCol: Int) {
-        piece.row = toRow
-        piece.col = toCol
+    fun movePiece(fromRow: Int, fromCol: Int, toRow: Int, toCol: Int) {
+        val movingPiece = pieceAt(fromRow,fromCol) ?: return
         pieceAt(toRow,toCol).let { pieces.remove(it) }
+        movingPiece.col = toCol
+        movingPiece.row = toRow
     }
 }

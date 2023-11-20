@@ -1,5 +1,6 @@
 package com.example.cheatchess
 
+import android.graphics.Canvas
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -11,7 +12,7 @@ import retrofit2.HttpException
 
 class MainActivity : AppCompatActivity(), ChessDelegate {
     private lateinit var binding: ActivityMainBinding
-    override val chessModel = ChessModel()
+    val chessModel = ChessModel()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -41,5 +42,12 @@ class MainActivity : AppCompatActivity(), ChessDelegate {
             else Log.d("MainActivity", "response not successful")
 
         }
+    }
+
+    override fun pieceAt(row: Int, col: Int) = chessModel.pieceAt(row,col)
+
+    override fun movePiece(fromRow: Int, fromCol: Int, toRow: Int, toCol: Int) {
+        chessModel.movePiece(fromRow,fromCol,toRow,toCol)
+        binding.chessView.invalidate()
     }
 }
