@@ -1,25 +1,82 @@
 package com.example.cheatchess
 
 import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
+import android.graphics.RectF
 import android.util.AttributeSet
 import android.view.View
+import androidx.core.content.ContextCompat
+import java.lang.Integer.min
 
 class ChessView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
     private val paint = Paint()
-    private val rectSide = 130f
-    private val marginLeft = 20f
-    private val marginTop = 200f
+    private val darkColor = Color.parseColor("#703B24")
+    private val lightColor = Color.parseColor("#f8e7bb")
+    private var squareSide = 130f
+    private var marginLeft = 20f
+    private var marginTop = 200f
+    private val scaleFactor = .95f
+    private val bitmaps = mapOf<Int,Bitmap>(
+        Pair(R.drawable.black_rook,BitmapFactory.decodeResource(resources, R.drawable.black_rook)),
+        Pair(R.drawable.black_knight,BitmapFactory.decodeResource(resources, R.drawable.black_knight)),
+        Pair(R.drawable.black_bishop,BitmapFactory.decodeResource(resources, R.drawable.black_bishop)),
+        Pair(R.drawable.black_queen,BitmapFactory.decodeResource(resources, R.drawable.black_queen)),
+        Pair(R.drawable.black_king,BitmapFactory.decodeResource(resources, R.drawable.black_king)),
+        Pair(R.drawable.black_pawn,BitmapFactory.decodeResource(resources, R.drawable.black_pawn)),
+        Pair(R.drawable.white_rook,BitmapFactory.decodeResource(resources, R.drawable.white_rook)),
+        Pair(R.drawable.white_knight,BitmapFactory.decodeResource(resources, R.drawable.white_knight)),
+        Pair(R.drawable.white_bishop,BitmapFactory.decodeResource(resources, R.drawable.white_bishop)),
+        Pair(R.drawable.white_queen,BitmapFactory.decodeResource(resources, R.drawable.white_queen)),
+        Pair(R.drawable.white_king,BitmapFactory.decodeResource(resources, R.drawable.white_king)),
+        Pair(R.drawable.white_pawn,BitmapFactory.decodeResource(resources, R.drawable.white_pawn)),
+    )
+
+    var chessDelegate: ChessDelegate? = null
 
     override fun onDraw(canvas: Canvas?) {
         super.onDraw(canvas)
-        for (i in 0..7)
-            for (j in 0..7) {
-                paint.color = if ((i + j) % 2 == 0) Color.LTGRAY else Color.GRAY
-                canvas?.drawRect(marginLeft + rectSide*j,marginTop + rectSide*i,marginLeft + rectSide*(j+1),marginTop + rectSide*(i+1),paint)
-            }
+        canvas ?: return
+        scaleToScreenSize(canvas)
+        drawBoard(canvas)
+        drawPieces(canvas)
+    }
 
+    private fun drawBoard(canvas: Canvas) {
+        for (row in 0..7)
+            for (col in 0..7) {
+                drawSquareAt(canvas, row, col)
+            }
+    }
+
+    private fun drawPieceAt(canvas: Canvas, row: Int, col: Int, bitmap: Bitmap) {
+        canvas.drawBitmap(bitmap,null, RectF(marginLeft + col * squareSide,marginTop + row * squareSide,marginLeft + (col + 1) * squareSide,marginTop + (row + 1) * squareSide),paint)
+    }
+
+    private fun drawPieces(canvas: Canvas) {
+        chessDelegate?.let {
+            for (piece in it.chessModel.pieces)
+                drawPieceAt(canvas, piece.row, piece.col, bitmaps[piece.resID]!!)
+        }
+    }
+
+    private fun drawSquareAt(canvas: Canvas, row: Int, col: Int) {
+        paint.color = if ((row + col) % 2 == 0) lightColor else darkColor
+        canvas.drawRect(
+            marginLeft + squareSide*col,
+            marginTop + squareSide*row,
+            marginLeft + squareSide*(col+1),
+            marginTop + squareSide*(row+1),
+            paint)
+    }
+
+    private fun scaleToScreenSize(canvas: Canvas) {
+            val boardSide = min(canvas.width, canvas.height) * scaleFactor
+            squareSide = boardSide / 8f
+            marginLeft = (canvas.width - boardSide) / 2f
+            marginTop = (canvas.height - boardSide) / 2f
     }
 }
