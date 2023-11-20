@@ -23,8 +23,10 @@ class ChessView(context: Context?, attrs: AttributeSet?) : View(context, attrs) 
     private var marginLeft = 20f
     private var marginTop = 200f
     private val scaleFactor = .95f
-    var fromRow: Int = -1
-    var fromCol: Int = -1
+    private var fromRow: Int = -1
+    private var fromCol: Int = -1
+    private var movingPieceX = -1f
+    private var movingPieceY = -1f
     private val bitmaps = mapOf<Int,Bitmap>(
         Pair(R.drawable.black_rook,BitmapFactory.decodeResource(resources, R.drawable.black_rook)),
         Pair(R.drawable.black_knight,BitmapFactory.decodeResource(resources, R.drawable.black_knight)),
@@ -57,9 +59,12 @@ class ChessView(context: Context?, attrs: AttributeSet?) : View(context, attrs) 
                 fromCol = ((event.x - marginLeft) / squareSide).toInt()
                 fromRow = ((event.y - marginTop) / squareSide).toInt()
                 Log.d("MainActivity", "Down :($fromRow,$fromCol)")
+                chessDelegate?.pieceAt(fromRow,fromCol) ?: return false
             }
             MotionEvent.ACTION_MOVE -> {
-
+                movingPieceX = event.x
+                movingPieceY = event.y
+                invalidate()
             }
             MotionEvent.ACTION_UP -> {
                 val col = ((event.x - marginLeft) / squareSide).toInt()
@@ -78,16 +83,22 @@ class ChessView(context: Context?, attrs: AttributeSet?) : View(context, attrs) 
             }
     }
 
-    private fun drawPieceAt(canvas: Canvas, row: Int, col: Int, bitmap: Bitmap) {
-        canvas.drawBitmap(bitmap,null, RectF(marginLeft + col * squareSide,marginTop + row * squareSide,marginLeft + (col + 1) * squareSide,marginTop + (row + 1) * squareSide),paint)
+    private fun drawPieceAt(canvas: Canvas, row: Int, col: Int, resId: Int) {
+        canvas.drawBitmap(bitmaps[resId]!!,null, RectF(marginLeft + col * squareSide,marginTop + row * squareSide,marginLeft + (col + 1) * squareSide,marginTop + (row + 1) * squareSide),paint)
+    }
+
+    private fun drawMovingPiece(canvas: Canvas, y: Float, x: Float, resId: Int) {
+        canvas.drawBitmap(bitmaps[resId]!!,null, RectF(x - squareSide/2,y - squareSide/2,x + squareSide/2,y + squareSide/2),paint)
     }
 
     private fun drawPieces(canvas: Canvas) {
-        chessDelegate?.let { cd ->
-            for (row in 0..7)
-                for (col in 0..7)
-                    cd.pieceAt(row,col)?.let { drawPieceAt(canvas, row, col, bitmaps[it.resID]!!) }
+        for (row in 0..7)
+            for (col in 0..7)
+                if (fromRow != row || fromCol != col)
+                    chessDelegate?.pieceAt(row,col)?.let { drawPieceAt(canvas, row, col, it.resID) }
 
+        chessDelegate?.pieceAt(fromRow,fromCol)?.let {
+            drawMovingPiece(canvas, movingPieceY, movingPieceX, it.resID)
         }
     }
 

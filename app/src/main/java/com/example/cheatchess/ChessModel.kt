@@ -3,11 +3,10 @@ package com.example.cheatchess
 import android.util.Log
 
 class ChessModel {
-    private val pieces = mutableSetOf<ChessPiece>()
+    private val pieces = mutableListOf<ChessPiece>()
 
     init {
         setStartingPosition()
-        movePiece(7,4,0,4)
     }
 
     fun pieceAt(row: Int, col: Int): ChessPiece? {
