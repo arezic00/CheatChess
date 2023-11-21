@@ -17,7 +17,7 @@ class ChessModel {
         return null
     }
 
-    private fun setStartingPosition() {
+    fun setStartingPosition() {
         pieces.removeAll(pieces)
         for (i in 0..1) {
             pieces.add(ChessPiece(0, i * 7, R.drawable.black_rook))
@@ -42,7 +42,7 @@ class ChessModel {
         }
     }
 
-    private fun emptyBoard() {
+    fun emptyBoard() {
         pieces.removeAll(pieces)
         pieces.add(ChessPiece(0, 4, R.drawable.black_king))
         pieces.add(ChessPiece(7, 4, R.drawable.white_king))
