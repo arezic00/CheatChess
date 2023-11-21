@@ -141,10 +141,15 @@ class ChessView(context: Context?, attrs: AttributeSet?) : View(context, attrs) 
     }
 
     private fun drawOutsidePieces(canvas: Canvas) {
-        for (i in 0..5)
+        for (i in 0..5) {
+            chessDelegate?.pieceAt(-1, i)?.let {
+                drawPieceAt(canvas, it.row, it.col, it.resID)
+            }
+
             chessDelegate?.pieceAt(8, i)?.let {
                 drawPieceAt(canvas, it.row, it.col, it.resID)
             }
+        }
     }
 
     private fun drawSquareAt(canvas: Canvas, row: Int, col: Int) {

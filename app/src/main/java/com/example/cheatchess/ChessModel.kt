@@ -47,6 +47,12 @@ class ChessModel {
         pieces.add(ChessPiece(0, 4, R.drawable.black_king))
         pieces.add(ChessPiece(7, 4, R.drawable.white_king))
 
+        pieces.add(ChessPiece(-1, 0, R.drawable.black_pawn))
+        pieces.add(ChessPiece(-1, 1, R.drawable.black_knight))
+        pieces.add(ChessPiece(-1, 2, R.drawable.black_bishop))
+        pieces.add(ChessPiece(-1, 3, R.drawable.black_rook))
+        pieces.add(ChessPiece(-1, 4, R.drawable.black_queen))
+
         pieces.add(ChessPiece(8, 0, R.drawable.white_pawn))
         pieces.add(ChessPiece(8, 1, R.drawable.white_knight))
         pieces.add(ChessPiece(8, 2, R.drawable.white_bishop))
