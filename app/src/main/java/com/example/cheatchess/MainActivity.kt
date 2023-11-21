@@ -44,8 +44,8 @@ class MainActivity : AppCompatActivity(), ChessDelegate {
 
     override fun pieceAt(row: Int, col: Int) = chessModel.pieceAt(row, col)
 
-    override fun movePiece(fromRow: Int, fromCol: Int, toRow: Int, toCol: Int) {
-        chessModel.movePiece(fromRow, fromCol, toRow, toCol)
+    override fun movePiece(movingPiece: ChessPiece, toRow: Int, toCol: Int) {
+        chessModel.movePiece(movingPiece, toRow, toCol)
         binding.chessView.invalidate()
     }
 }

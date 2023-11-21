@@ -22,10 +22,9 @@ class ChessView(context: Context?, attrs: AttributeSet?) : View(context, attrs) 
     private var marginLeft = 20f
     private var marginTop = 200f
     private val scaleFactor = .95f
-    private var fromRow: Int = -1
-    private var fromCol: Int = -1
     private var movingPieceX = -1f
     private var movingPieceY = -1f
+    private var movingPiece: ChessPiece? = null
     private val bitmaps = mapOf<Int, Bitmap>(
         Pair(R.drawable.black_rook, BitmapFactory.decodeResource(resources, R.drawable.black_rook)),
         Pair(
@@ -74,9 +73,9 @@ class ChessView(context: Context?, attrs: AttributeSet?) : View(context, attrs) 
         event ?: return false
         when (event.action) {
             MotionEvent.ACTION_DOWN -> {
-                fromCol = ((event.x - marginLeft) / squareSide).toInt()
-                fromRow = ((event.y - marginTop) / squareSide).toInt()
-                chessDelegate?.pieceAt(fromRow, fromCol) ?: return false
+                val fromCol = customToInt((event.x - marginLeft) / squareSide)
+                val fromRow = customToInt((event.y - marginTop) / squareSide)
+                movingPiece = chessDelegate?.pieceAt(fromRow, fromCol) ?: return false
             }
 
             MotionEvent.ACTION_MOVE -> {
@@ -86,14 +85,17 @@ class ChessView(context: Context?, attrs: AttributeSet?) : View(context, attrs) 
             }
 
             MotionEvent.ACTION_UP -> {
-                val col = ((event.x - marginLeft) / squareSide).toInt()
-                val row = ((event.y - marginTop) / squareSide).toInt()
-                chessDelegate?.movePiece(fromRow, fromCol, row, col)
-                fromRow = -1
-                fromCol = -1
+                val toCol = customToInt((event.x - marginLeft) / squareSide)
+                val toRow = customToInt((event.y - marginTop) / squareSide)
+                chessDelegate?.movePiece(movingPiece!!, toRow, toCol)
+                movingPiece = null
             }
         }
         return true
+    }
+
+    private fun customToInt(float: Float): Int {
+        return if (float < 0) -1 else float.toInt()
     }
 
     private fun drawBoard(canvas: Canvas) {
@@ -129,14 +131,20 @@ class ChessView(context: Context?, attrs: AttributeSet?) : View(context, attrs) 
     private fun drawPieces(canvas: Canvas) {
         for (row in 0..7)
             for (col in 0..7)
-            //Added this check to not draw the moving piece
-                if (fromRow != row || fromCol != col)
-                    chessDelegate?.pieceAt(row, col)
-                        ?.let { drawPieceAt(canvas, row, col, it.resID) }
+                chessDelegate?.pieceAt(row, col)
+                    ?.let { if (it != movingPiece) drawPieceAt(canvas, row, col, it.resID) }
 
-        chessDelegate?.pieceAt(fromRow, fromCol)?.let {
+        movingPiece?.let {
             drawMovingPiece(canvas, movingPieceY, movingPieceX, it.resID)
         }
+        drawOutsidePieces(canvas)
+    }
+
+    private fun drawOutsidePieces(canvas: Canvas) {
+        for (i in 0..5)
+            chessDelegate?.pieceAt(8, i)?.let {
+                drawPieceAt(canvas, it.row, it.col, it.resID)
+            }
     }
 
     private fun drawSquareAt(canvas: Canvas, row: Int, col: Int) {
