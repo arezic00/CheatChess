@@ -76,7 +76,6 @@ class ChessView(context: Context?, attrs: AttributeSet?) : View(context, attrs) 
             MotionEvent.ACTION_DOWN -> {
                 fromCol = ((event.x - marginLeft) / squareSide).toInt()
                 fromRow = ((event.y - marginTop) / squareSide).toInt()
-                Log.d("MainActivity", "Down :($fromRow,$fromCol)")
                 chessDelegate?.pieceAt(fromRow, fromCol) ?: return false
             }
 
@@ -89,7 +88,6 @@ class ChessView(context: Context?, attrs: AttributeSet?) : View(context, attrs) 
             MotionEvent.ACTION_UP -> {
                 val col = ((event.x - marginLeft) / squareSide).toInt()
                 val row = ((event.y - marginTop) / squareSide).toInt()
-                Log.d("MainActivity", "Up :($row,$col)")
                 chessDelegate?.movePiece(fromRow, fromCol, row, col)
                 fromRow = -1
                 fromCol = -1
