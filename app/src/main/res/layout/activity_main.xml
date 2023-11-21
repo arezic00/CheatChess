@@ -1,8 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.example.cheatchess.ChessView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/chessView"
-     android:layout_height="match_parent"
-    android:layout_width="match_parent">
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="center"
+    android:gravity="center"
+    android:orientation="vertical">
 
-</com.example.cheatchess.ChessView>
+    <com.example.cheatchess.ChessView
+        android:id="@+id/chessView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    </com.example.cheatchess.ChessView>
+
+    <Button
+        android:id="@+id/btn_clear"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/clear" />
+
+    <Button
+        android:id="@+id/btn_reset"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/reset" />
+</LinearLayout>
 
