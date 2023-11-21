@@ -58,18 +58,26 @@ class ChessModel {
         if (movingPiece.row == toRow && movingPiece.col == toCol) return
         val range = 0..7
         if (!(range.contains(toCol)) || !(range.contains(toRow))) {
-            if (!isKing(movingPiece))
+            if (!isKing(movingPiece) && isOnBoard(movingPiece))
                 pieces.remove(movingPiece)
             return
         }
         val toPiece = pieceAt(toRow, toCol)
         if (toPiece != null && isKing(toPiece)) return
         pieces.remove(toPiece)
+        if (!isOnBoard(movingPiece)) {
+            pieces.add(movingPiece.copy())
+        }
         movingPiece.col = toCol
         movingPiece.row = toRow
+
     }
 
     private fun isKing(chessPiece: ChessPiece) : Boolean {
         return chessPiece.resID == R.drawable.white_king || chessPiece.resID == R.drawable.black_king
+    }
+
+    private fun isOnBoard(chessPiece: ChessPiece) : Boolean {
+        return (0..7).contains(chessPiece.row)
     }
 }
