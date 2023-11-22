@@ -1,8 +1,10 @@
 package com.example.cheatchess
 
+import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.widget.Button
 import androidx.lifecycle.lifecycleScope
 import com.example.cheatchess.databinding.ActivityMainBinding
 import kotlinx.coroutines.launch
@@ -18,6 +20,30 @@ class MainActivity : AppCompatActivity(), ChessDelegate {
         setContentView(binding.root)
 
         binding.chessView.chessDelegate = this
+
+        binding.btnClear.setOnClickListener {
+            chessModel.emptyBoard()
+            binding.chessView.invalidate()
+        }
+
+        binding.btnReset.setOnClickListener {
+            chessModel.setStartingPosition()
+            binding.chessView.invalidate()
+        }
+
+        binding.btnTurn.setOnClickListener {
+            chessModel.apply {
+                changeTurn()
+                (it as Button).apply {
+                    setBackgroundColor(currentTextColor)
+                    val color = if (isWhiteTurn) Color.BLACK else Color.WHITE
+                    setTextColor(color)
+                }
+            }
+        }
+        binding.btnAnalyze.setOnClickListener {
+            analyzePosition()
+        }
 /* ACCESSING THE API
         lifecycleScope.launch {
             val positionFEN = "r2q1rk1/ppp2ppp/3bbn2/3p4/8/1B1P4/PPP2PPP/RNB1QRK1 w - - 5 11"
@@ -47,5 +73,9 @@ class MainActivity : AppCompatActivity(), ChessDelegate {
     override fun movePiece(movingPiece: ChessPiece, toRow: Int, toCol: Int) {
         chessModel.movePiece(movingPiece, toRow, toCol)
         binding.chessView.invalidate()
+    }
+
+    private fun analyzePosition() {
+        //TODO
     }
 }

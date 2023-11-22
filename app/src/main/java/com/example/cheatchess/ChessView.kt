@@ -60,6 +60,12 @@ class ChessView(context: Context?, attrs: AttributeSet?) : View(context, attrs) 
 
     var chessDelegate: ChessDelegate? = null
 
+    override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec)
+        val smaller = min(widthMeasureSpec, heightMeasureSpec)
+        setMeasuredDimension(smaller, (smaller + squareSide * 2).toInt())
+    }
+
     override fun onDraw(canvas: Canvas?) {
         super.onDraw(canvas)
         canvas ?: return
