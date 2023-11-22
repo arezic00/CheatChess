@@ -117,7 +117,7 @@ class ChessModel {
         }
         positionFEN = positionFEN.dropLast(1)
         positionFEN += if(isWhiteTurn) " w" else " b"
-        positionFEN += " - - 5 11"
+        positionFEN += " KQkq - 0 1"
         return positionFEN
     }
 

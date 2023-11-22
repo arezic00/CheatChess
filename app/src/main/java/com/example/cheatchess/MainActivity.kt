@@ -45,9 +45,22 @@ class MainActivity : AppCompatActivity(), ChessDelegate {
             analyzePosition()
         }
 /* ACCESSING THE API
+
+        */
+    }
+
+    override fun pieceAt(row: Int, col: Int) = chessModel.pieceAt(row, col)
+
+    override fun movePiece(movingPiece: ChessPiece, toRow: Int, toCol: Int) {
+        chessModel.movePiece(movingPiece, toRow, toCol)
+        binding.chessView.invalidate()
+    }
+
+    private fun analyzePosition() {
+        Log.d("MainActivity", chessModel.positionToFEN())
         lifecycleScope.launch {
-            val positionFEN = "r2q1rk1/ppp2ppp/3bbn2/3p4/8/1B1P4/PPP2PPP/RNB1QRK1 w - - 5 11"
-            val depth = "10"
+            val positionFEN = chessModel.positionToFEN()
+            val depth = "13"
             val mode = "eval"
             val options = mapOf(Pair("fen", positionFEN), Pair("depth", depth), Pair("mode", mode))
 
@@ -65,17 +78,5 @@ class MainActivity : AppCompatActivity(), ChessDelegate {
             else Log.d("MainActivity", "response not successful")
 
         }
-        */
-    }
-
-    override fun pieceAt(row: Int, col: Int) = chessModel.pieceAt(row, col)
-
-    override fun movePiece(movingPiece: ChessPiece, toRow: Int, toCol: Int) {
-        chessModel.movePiece(movingPiece, toRow, toCol)
-        binding.chessView.invalidate()
-    }
-
-    private fun analyzePosition() {
-        Log.d("MainActivity", chessModel.positionToFEN())
     }
 }
