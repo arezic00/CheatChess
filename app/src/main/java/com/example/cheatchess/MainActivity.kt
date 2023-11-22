@@ -76,6 +76,6 @@ class MainActivity : AppCompatActivity(), ChessDelegate {
     }
 
     private fun analyzePosition() {
-        //TODO
+        Log.d("MainActivity", chessModel.positionToFEN())
     }
 }

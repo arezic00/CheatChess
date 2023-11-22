@@ -91,4 +91,51 @@ class ChessModel {
     fun changeTurn() {
         isWhiteTurn = !isWhiteTurn
     }
+
+    public fun positionToFEN() : String {
+        var positionFEN = ""
+        for (row in 0..7) {
+            var emptySquareCounter = 0
+            for (col in 0..7) {
+                val char = pieceToCharacter(pieceAt(row, col))
+                if (char == null) {
+                    emptySquareCounter++
+                    if (col == 7) {
+                        positionFEN += emptySquareCounter
+                        emptySquareCounter = 0
+                    }
+                }
+                else {
+                    if (emptySquareCounter != 0) {
+                        positionFEN += emptySquareCounter
+                        emptySquareCounter = 0
+                    }
+                    positionFEN += char
+                }
+            }
+            positionFEN += "/"
+        }
+        positionFEN = positionFEN.dropLast(1)
+        positionFEN += if(isWhiteTurn) " w" else " b"
+        positionFEN += " - - 5 11"
+        return positionFEN
+    }
+
+    private fun pieceToCharacter(chessPiece: ChessPiece?): String? {
+        return when (chessPiece?.resID) {
+            R.drawable.black_pawn -> "p"
+            R.drawable.white_pawn -> "P"
+            R.drawable.black_rook -> "r"
+            R.drawable.black_knight -> "n"
+            R.drawable.black_bishop -> "b"
+            R.drawable.black_queen -> "q"
+            R.drawable.black_king -> "k"
+            R.drawable.white_rook -> "R"
+            R.drawable.white_knight -> "K"
+            R.drawable.white_bishop -> "B"
+            R.drawable.white_queen -> "Q"
+            R.drawable.white_king -> "K"
+            else -> null
+        }
+    }
 }
