@@ -43,10 +43,8 @@ class MainActivity : AppCompatActivity(), ChessDelegate {
         }
         binding.btnAnalyze.setOnClickListener {
             analyzePosition()
-        }
-/* ACCESSING THE API
 
-        */
+        }
     }
 
     override fun pieceAt(row: Int, col: Int) = chessModel.pieceAt(row, col)
@@ -74,8 +72,9 @@ class MainActivity : AppCompatActivity(), ChessDelegate {
                 return@launch
             }
             if (response.isSuccessful && response.body() != null)
-                Log.d("MainActivity", response.body().toString())
+                binding.tvEval.text = response.body()!!.data
             else Log.d("MainActivity", "response not successful")
+
 
         }
     }
