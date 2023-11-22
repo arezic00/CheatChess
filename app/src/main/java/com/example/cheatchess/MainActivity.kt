@@ -1,8 +1,10 @@
 package com.example.cheatchess
 
+import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.widget.Button
 import androidx.lifecycle.lifecycleScope
 import com.example.cheatchess.databinding.ActivityMainBinding
 import kotlinx.coroutines.launch
@@ -27,6 +29,17 @@ class MainActivity : AppCompatActivity(), ChessDelegate {
         binding.btnReset.setOnClickListener {
             chessModel.setStartingPosition()
             binding.chessView.invalidate()
+        }
+
+        binding.btnTurn.setOnClickListener {
+            chessModel.apply {
+                changeTurn()
+                (it as Button).apply {
+                    setBackgroundColor(currentTextColor)
+                    val color = if (isWhiteTurn) Color.BLACK else Color.WHITE
+                    setTextColor(color)
+                }
+            }
         }
 /* ACCESSING THE API
         lifecycleScope.launch {

@@ -4,6 +4,7 @@ import android.util.Log
 
 class ChessModel {
     private val pieces = mutableListOf<ChessPiece>()
+    var isWhiteTurn = true
 
     init {
         emptyBoard()
@@ -85,5 +86,9 @@ class ChessModel {
 
     private fun isOnBoard(chessPiece: ChessPiece) : Boolean {
         return (0..7).contains(chessPiece.row)
+    }
+
+    fun changeTurn() {
+        isWhiteTurn = !isWhiteTurn
     }
 }
