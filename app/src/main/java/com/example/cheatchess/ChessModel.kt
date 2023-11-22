@@ -1,6 +1,10 @@
 package com.example.cheatchess
 
-import android.util.Log
+import com.example.cheatchess.Constants.BOARD_RANGE
+import com.example.cheatchess.Constants.MAX_INDEX
+import com.example.cheatchess.Constants.MIN_INDEX
+import com.example.cheatchess.Constants.OUTSIDE_INDEX_ABOVE
+import com.example.cheatchess.Constants.OUTSIDE_INDEX_BELOW
 
 class ChessModel {
     private val pieces = mutableListOf<ChessPiece>()
@@ -21,50 +25,49 @@ class ChessModel {
     fun setStartingPosition() {
         pieces.removeAll(pieces)
         for (i in 0..1) {
-            pieces.add(ChessPiece(0, i * 7, R.drawable.black_rook))
-            pieces.add(ChessPiece(7, i * 7, R.drawable.white_rook))
+            pieces.add(ChessPiece(MIN_INDEX, i * 7, R.drawable.black_rook))
+            pieces.add(ChessPiece(MAX_INDEX, i * 7, R.drawable.white_rook))
 
-            pieces.add(ChessPiece(0, 1 + i * 5, R.drawable.black_knight))
-            pieces.add(ChessPiece(7, 1 + i * 5, R.drawable.white_knight))
+            pieces.add(ChessPiece(MIN_INDEX, 1 + i * 5, R.drawable.black_knight))
+            pieces.add(ChessPiece(MAX_INDEX, 1 + i * 5, R.drawable.white_knight))
 
-            pieces.add(ChessPiece(0, 2 + i * 3, R.drawable.black_bishop))
-            pieces.add(ChessPiece(7, 2 + i * 3, R.drawable.white_bishop))
+            pieces.add(ChessPiece(MIN_INDEX, 2 + i * 3, R.drawable.black_bishop))
+            pieces.add(ChessPiece(MAX_INDEX, 2 + i * 3, R.drawable.white_bishop))
         }
 
-        pieces.add(ChessPiece(0, 3, R.drawable.black_queen))
-        pieces.add(ChessPiece(7, 3, R.drawable.white_queen))
+        pieces.add(ChessPiece(MIN_INDEX, 3, R.drawable.black_queen))
+        pieces.add(ChessPiece(MAX_INDEX, 3, R.drawable.white_queen))
 
-        pieces.add(ChessPiece(0, 4, R.drawable.black_king))
-        pieces.add(ChessPiece(7, 4, R.drawable.white_king))
+        pieces.add(ChessPiece(MIN_INDEX, 4, R.drawable.black_king))
+        pieces.add(ChessPiece(MAX_INDEX, 4, R.drawable.white_king))
 
-        for (i in 0..7) {
-            pieces.add(ChessPiece(1, i, R.drawable.black_pawn))
-            pieces.add(ChessPiece(6, i, R.drawable.white_pawn))
+        for (i in BOARD_RANGE) {
+            pieces.add(ChessPiece(MIN_INDEX + 1, i, R.drawable.black_pawn))
+            pieces.add(ChessPiece(MAX_INDEX - 1, i, R.drawable.white_pawn))
         }
     }
 
     fun emptyBoard() {
         pieces.removeAll(pieces)
-        pieces.add(ChessPiece(0, 4, R.drawable.black_king))
-        pieces.add(ChessPiece(7, 4, R.drawable.white_king))
+        pieces.add(ChessPiece(MIN_INDEX, 4, R.drawable.black_king))
+        pieces.add(ChessPiece(MAX_INDEX, 4, R.drawable.white_king))
 
-        pieces.add(ChessPiece(-1, 0, R.drawable.black_pawn))
-        pieces.add(ChessPiece(-1, 1, R.drawable.black_knight))
-        pieces.add(ChessPiece(-1, 2, R.drawable.black_bishop))
-        pieces.add(ChessPiece(-1, 3, R.drawable.black_rook))
-        pieces.add(ChessPiece(-1, 4, R.drawable.black_queen))
+        pieces.add(ChessPiece(OUTSIDE_INDEX_ABOVE, 0, R.drawable.black_pawn))
+        pieces.add(ChessPiece(OUTSIDE_INDEX_ABOVE, 1, R.drawable.black_knight))
+        pieces.add(ChessPiece(OUTSIDE_INDEX_ABOVE, 2, R.drawable.black_bishop))
+        pieces.add(ChessPiece(OUTSIDE_INDEX_ABOVE, 3, R.drawable.black_rook))
+        pieces.add(ChessPiece(OUTSIDE_INDEX_ABOVE, 4, R.drawable.black_queen))
 
-        pieces.add(ChessPiece(8, 0, R.drawable.white_pawn))
-        pieces.add(ChessPiece(8, 1, R.drawable.white_knight))
-        pieces.add(ChessPiece(8, 2, R.drawable.white_bishop))
-        pieces.add(ChessPiece(8, 3, R.drawable.white_rook))
-        pieces.add(ChessPiece(8, 4, R.drawable.white_queen))
+        pieces.add(ChessPiece(OUTSIDE_INDEX_BELOW, 0, R.drawable.white_pawn))
+        pieces.add(ChessPiece(OUTSIDE_INDEX_BELOW, 1, R.drawable.white_knight))
+        pieces.add(ChessPiece(OUTSIDE_INDEX_BELOW, 2, R.drawable.white_bishop))
+        pieces.add(ChessPiece(OUTSIDE_INDEX_BELOW, 3, R.drawable.white_rook))
+        pieces.add(ChessPiece(OUTSIDE_INDEX_BELOW, 4, R.drawable.white_queen))
     }
 
     fun movePiece(movingPiece: ChessPiece, toRow: Int, toCol: Int) {
         if (movingPiece.row == toRow && movingPiece.col == toCol) return
-        val range = 0..7
-        if (!(range.contains(toCol)) || !(range.contains(toRow))) {
+        if (!(BOARD_RANGE.contains(toCol)) || !(BOARD_RANGE.contains(toRow))) {
             if (!isKing(movingPiece) && isOnBoard(movingPiece))
                 pieces.remove(movingPiece)
             return
@@ -85,22 +88,22 @@ class ChessModel {
     }
 
     private fun isOnBoard(chessPiece: ChessPiece) : Boolean {
-        return (0..7).contains(chessPiece.row)
+        return (BOARD_RANGE).contains(chessPiece.row)
     }
 
     fun changeTurn() {
         isWhiteTurn = !isWhiteTurn
     }
 
-    public fun positionToFEN() : String {
+    fun positionToFEN() : String {
         var positionFEN = ""
-        for (row in 0..7) {
+        for (row in BOARD_RANGE) {
             var emptySquareCounter = 0
-            for (col in 0..7) {
+            for (col in BOARD_RANGE) {
                 val char = pieceToCharacter(pieceAt(row, col))
                 if (char == null) {
                     emptySquareCounter++
-                    if (col == 7) {
+                    if (col == MAX_INDEX) {
                         positionFEN += emptySquareCounter
                         emptySquareCounter = 0
                     }
@@ -131,7 +134,7 @@ class ChessModel {
             R.drawable.black_queen -> "q"
             R.drawable.black_king -> "k"
             R.drawable.white_rook -> "R"
-            R.drawable.white_knight -> "K"
+            R.drawable.white_knight -> "N"
             R.drawable.white_bishop -> "B"
             R.drawable.white_queen -> "Q"
             R.drawable.white_king -> "K"

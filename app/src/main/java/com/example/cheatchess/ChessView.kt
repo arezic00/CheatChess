@@ -9,9 +9,11 @@ import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.RectF
 import android.util.AttributeSet
-import android.util.Log
 import android.view.MotionEvent
 import android.view.View
+import com.example.cheatchess.Constants.BOARD_RANGE
+import com.example.cheatchess.Constants.OUTSIDE_INDEX_ABOVE
+import com.example.cheatchess.Constants.OUTSIDE_INDEX_BELOW
 import java.lang.Integer.min
 
 class ChessView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
@@ -105,8 +107,8 @@ class ChessView(context: Context?, attrs: AttributeSet?) : View(context, attrs) 
     }
 
     private fun drawBoard(canvas: Canvas) {
-        for (row in 0..7)
-            for (col in 0..7) {
+        for (row in BOARD_RANGE)
+            for (col in BOARD_RANGE) {
                 drawSquareAt(canvas, row, col)
             }
     }
@@ -135,8 +137,8 @@ class ChessView(context: Context?, attrs: AttributeSet?) : View(context, attrs) 
     }
 
     private fun drawPieces(canvas: Canvas) {
-        for (row in 0..7)
-            for (col in 0..7)
+        for (row in BOARD_RANGE)
+            for (col in BOARD_RANGE)
                 chessDelegate?.pieceAt(row, col)
                     ?.let { if (it != movingPiece) drawPieceAt(canvas, row, col, it.resID) }
 
@@ -148,11 +150,11 @@ class ChessView(context: Context?, attrs: AttributeSet?) : View(context, attrs) 
 
     private fun drawOutsidePieces(canvas: Canvas) {
         for (i in 0..5) {
-            chessDelegate?.pieceAt(-1, i)?.let {
+            chessDelegate?.pieceAt(OUTSIDE_INDEX_ABOVE, i)?.let {
                 drawPieceAt(canvas, it.row, it.col, it.resID)
             }
 
-            chessDelegate?.pieceAt(8, i)?.let {
+            chessDelegate?.pieceAt(OUTSIDE_INDEX_BELOW, i)?.let {
                 drawPieceAt(canvas, it.row, it.col, it.resID)
             }
         }

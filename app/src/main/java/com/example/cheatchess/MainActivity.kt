@@ -55,7 +55,6 @@ class MainActivity : AppCompatActivity(), ChessDelegate {
     }
 
     private fun analyzePosition() {
-        Log.d("MainActivity", chessModel.positionToFEN())
         lifecycleScope.launch {
             val positionFEN = chessModel.positionToFEN()
             val depth = "13"
