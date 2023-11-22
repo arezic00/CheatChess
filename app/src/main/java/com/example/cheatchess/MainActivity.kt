@@ -41,6 +41,9 @@ class MainActivity : AppCompatActivity(), ChessDelegate {
                 }
             }
         }
+        binding.btnAnalyze.setOnClickListener {
+            analyzePosition()
+        }
 /* ACCESSING THE API
         lifecycleScope.launch {
             val positionFEN = "r2q1rk1/ppp2ppp/3bbn2/3p4/8/1B1P4/PPP2PPP/RNB1QRK1 w - - 5 11"
@@ -70,5 +73,9 @@ class MainActivity : AppCompatActivity(), ChessDelegate {
     override fun movePiece(movingPiece: ChessPiece, toRow: Int, toCol: Int) {
         chessModel.movePiece(movingPiece, toRow, toCol)
         binding.chessView.invalidate()
+    }
+
+    private fun analyzePosition() {
+        //TODO
     }
 }
