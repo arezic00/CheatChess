@@ -18,7 +18,7 @@ class MainActivity : AppCompatActivity(), ChessDelegate {
         setContentView(binding.root)
 
         binding.chessView.chessDelegate = this
-
+/* ACCESSING THE API
         lifecycleScope.launch {
             val positionFEN = "r2q1rk1/ppp2ppp/3bbn2/3p4/8/1B1P4/PPP2PPP/RNB1QRK1 w - - 5 11"
             val depth = "10"
@@ -39,12 +39,13 @@ class MainActivity : AppCompatActivity(), ChessDelegate {
             else Log.d("MainActivity", "response not successful")
 
         }
+        */
     }
 
     override fun pieceAt(row: Int, col: Int) = chessModel.pieceAt(row, col)
 
-    override fun movePiece(fromRow: Int, fromCol: Int, toRow: Int, toCol: Int) {
-        chessModel.movePiece(fromRow, fromCol, toRow, toCol)
+    override fun movePiece(movingPiece: ChessPiece, toRow: Int, toCol: Int) {
+        chessModel.movePiece(movingPiece, toRow, toCol)
         binding.chessView.invalidate()
     }
 }
