@@ -35,9 +35,18 @@ class MainActivity : AppCompatActivity(), ChessDelegate {
             chessModel.apply {
                 changeTurn()
                 (it as Button).apply {
-                    setBackgroundColor(currentTextColor)
-                    val color = if (isWhiteTurn) Color.BLACK else Color.WHITE
+                    val color: Int
+                    var turnString = "Turn: "
+                    if (isWhiteTurn) {
+                        turnString += "W"
+                        color = Color.WHITE
+                    }
+                    else {
+                        turnString += "B"
+                        color = Color.BLACK
+                    }
                     setTextColor(color)
+                    text = turnString
                 }
             }
         }
