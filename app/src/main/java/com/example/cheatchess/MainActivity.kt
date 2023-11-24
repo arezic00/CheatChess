@@ -79,9 +79,10 @@ class MainActivity : AppCompatActivity(), ChessDelegate {
                 Log.d("MainActivity", "HttpException")
                 return@launch
             }
-            if (response.isSuccessful && response.body() != null)
-                binding.tvEval.text = response.body()!!.data
-            else Log.d("MainActivity", "response not successful")
+            if (response.isSuccessful)
+                response.body()?.let {
+                    binding.tvEval.text = it.data
+                }
 
 
         }
