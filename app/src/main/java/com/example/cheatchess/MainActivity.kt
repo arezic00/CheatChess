@@ -82,7 +82,6 @@ class MainActivity : AppCompatActivity(), ChessDelegate {
             if (response.isSuccessful)
                 response.body()?.let {
                     binding.tvEval.text = it.data
-                    Log.d("MainActivity", "extracted:${extractEval(it.data)}:")
                     updateEvalBar(extractEval(it.data))
                 }
 
@@ -96,13 +95,6 @@ class MainActivity : AppCompatActivity(), ChessDelegate {
 
     private fun updateEvalBar(progress: Float) {
         val progressInt = ((progress + 10) * 5 ).toInt()
-        // -10 -> 0
-        // -9 -> 5
-        // -8 -> 10
-        // -5 -> 25
-        // 0 -> 50
-        // 5 -> 75
-        // 10 -> 100
         binding.pbEvalBar.progress = progressInt
     }
 }
