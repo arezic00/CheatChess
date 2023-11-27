@@ -9,6 +9,10 @@ import com.example.cheatchess.Constants.OUTSIDE_INDEX_BELOW
 class ChessModel {
     private val pieces = mutableListOf<ChessPiece>()
     var isWhiteTurn = true
+    var canCastleKingSideWhite = false
+    var canCastleQueenSideWhite = false
+    var canCastleKingSideBlack = false
+    var canCastleQueenSideBlack = false
 
     init {
         emptyBoard()
@@ -63,6 +67,7 @@ class ChessModel {
         pieces.add(ChessPiece(OUTSIDE_INDEX_BELOW, 2, R.drawable.white_bishop))
         pieces.add(ChessPiece(OUTSIDE_INDEX_BELOW, 3, R.drawable.white_rook))
         pieces.add(ChessPiece(OUTSIDE_INDEX_BELOW, 4, R.drawable.white_queen))
+
     }
 
     fun movePiece(movingPiece: ChessPiece, toRow: Int, toCol: Int) {
@@ -120,9 +125,11 @@ class ChessModel {
         }
         positionFEN = positionFEN.dropLast(1)
         positionFEN += if(isWhiteTurn) " w" else " b"
-        positionFEN += " KQkq - 0 1"
+        setCastlingRights()
+        positionFEN += " ${castlingRightsToString()} - 0 1"
         return positionFEN
     }
+
 
     private fun pieceToCharacter(chessPiece: ChessPiece?): String? {
         return when (chessPiece?.resID) {
@@ -140,5 +147,39 @@ class ChessModel {
             R.drawable.white_king -> "K"
             else -> null
         }
+    }
+
+    private fun setCastlingRights() {
+        var piece = pieceAt(7,4)
+        if (piece != null && piece.resID == R.drawable.white_king) {
+            piece = pieceAt(7,0)
+            canCastleQueenSideWhite = piece != null && piece.resID == R.drawable.white_rook
+            piece = pieceAt(7,7)
+            canCastleKingSideWhite = piece != null && piece.resID == R.drawable.white_rook
+        }
+        else {
+            canCastleKingSideWhite = false
+            canCastleQueenSideWhite = false
+        }
+        piece = pieceAt(0,4)
+        if (piece != null && piece.resID == R.drawable.black_king) {
+            piece = pieceAt(0,0)
+            canCastleQueenSideBlack = piece != null && piece.resID == R.drawable.black_rook
+            piece = pieceAt(0,7)
+            canCastleKingSideBlack = piece != null && piece.resID == R.drawable.black_rook
+        }
+        else {
+            canCastleKingSideBlack = false
+            canCastleQueenSideBlack = false
+        }
+    }
+
+    private fun castlingRightsToString(): String {
+        var result = ""
+        if (canCastleKingSideWhite) result += "K"
+        if (canCastleQueenSideWhite) result += "Q"
+        if (canCastleKingSideBlack) result += "k"
+        if (canCastleQueenSideBlack) result += "q"
+        return if (result == "") "-" else result
     }
 }
