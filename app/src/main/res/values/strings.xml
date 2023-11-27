@@ -2,6 +2,6 @@
     <string name="app_name">CheatChess</string>
     <string name="clear">Clear</string>
     <string name="reset">Reset</string>
-    <string name="turn">Turn</string>
+    <string name="turn">Turn: W</string>
     <string name="analyse">Analyse</string>
 </resources>

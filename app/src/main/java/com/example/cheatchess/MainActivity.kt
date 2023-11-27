@@ -35,9 +35,18 @@ class MainActivity : AppCompatActivity(), ChessDelegate {
             chessModel.apply {
                 changeTurn()
                 (it as Button).apply {
-                    setBackgroundColor(currentTextColor)
-                    val color = if (isWhiteTurn) Color.BLACK else Color.WHITE
+                    val color: Int
+                    var turnString = "Turn: "
+                    if (isWhiteTurn) {
+                        turnString += "W"
+                        color = Color.WHITE
+                    }
+                    else {
+                        turnString += "B"
+                        color = Color.BLACK
+                    }
                     setTextColor(color)
+                    text = turnString
                 }
             }
         }
@@ -70,11 +79,30 @@ class MainActivity : AppCompatActivity(), ChessDelegate {
                 Log.d("MainActivity", "HttpException")
                 return@launch
             }
-            if (response.isSuccessful && response.body() != null)
-                binding.tvEval.text = response.body()!!.data
-            else Log.d("MainActivity", "response not successful")
+            if (response.isSuccessful)
+                response.body()?.let {
+                    binding.tvEval.text = it.data
+                    Log.d("MainActivity", "extracted:${extractEval(it.data)}:")
+                    updateEvalBar(extractEval(it.data))
+                }
 
 
         }
+    }
+
+    private fun extractEval(responseData: String): Float {
+        return responseData.substring(18, responseData.length - 13).toFloat()
+    }
+
+    private fun updateEvalBar(progress: Float) {
+        val progressInt = ((progress + 10) * 5 ).toInt()
+        // -10 -> 0
+        // -9 -> 5
+        // -8 -> 10
+        // -5 -> 25
+        // 0 -> 50
+        // 5 -> 75
+        // 10 -> 100
+        binding.pbEvalBar.progress = progressInt
     }
 }

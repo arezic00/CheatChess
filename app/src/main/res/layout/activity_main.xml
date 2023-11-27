@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_gravity="center"
@@ -23,44 +24,65 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
+        android:layout_marginHorizontal="5dp"
         android:weightSum="3">
         <Button
             android:id="@+id/btn_clear"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            app:cornerRadius="5dp"
             android:text="@string/clear" />
         <Button
             android:id="@+id/btn_reset"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:layout_marginHorizontal="5dp"
+            app:cornerRadius="5dp"
             android:text="@string/reset" />
         <Button
-            android:id="@+id/btn_analyze"
+            android:id="@+id/btn_turn"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/analyse" />
+            android:textColor="@color/white"
+            app:cornerRadius="5dp"
+            android:text="@string/turn"
+            android:layout_weight="1"/>
+
     </LinearLayout>
+
+    <ProgressBar
+        android:id="@+id/pb_evalBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="5dp"
+        style="?android:progressBarStyleHorizontal"
+        android:progress="50"
+        android:progressDrawable="@drawable/linear_progress_bar"
+        android:indeterminate="false"/>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:layout_marginHorizontal="5dp">
         <TextView
             android:id="@+id/tv_eval"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="2"
+            android:text="Total evaluation: 0.0"
             android:textAlignment="center"/>
+
         <Button
-            android:id="@+id/btn_turn"
+            android:id="@+id/btn_analyze"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:backgroundTint="@color/white"
-            android:textColor="@color/black"
-            android:text="@string/turn"
-            android:layout_weight="1"/>
+            android:layout_weight="1"
+            android:layout_marginLeft="10dp"
+            app:cornerRadius="5dp"
+            android:text="@string/analyse" />
     </LinearLayout>
 </LinearLayout>
 
