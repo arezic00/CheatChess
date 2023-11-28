@@ -149,7 +149,7 @@ class ChessModel {
         }
     }
 
-    private fun setCastlingRights() {
+    private fun setCastlingRightsWhite() {
         var piece = pieceAt(7,4)
         if (piece != null && piece.resID == R.drawable.white_king) {
             piece = pieceAt(7,0)
@@ -161,7 +161,10 @@ class ChessModel {
             canCastleKingSideWhite = false
             canCastleQueenSideWhite = false
         }
-        piece = pieceAt(0,4)
+    }
+
+    private fun setCastlingRightsBlack() {
+        var piece = pieceAt(0,4)
         if (piece != null && piece.resID == R.drawable.black_king) {
             piece = pieceAt(0,0)
             canCastleQueenSideBlack = piece != null && piece.resID == R.drawable.black_rook
@@ -172,6 +175,11 @@ class ChessModel {
             canCastleKingSideBlack = false
             canCastleQueenSideBlack = false
         }
+    }
+
+    private fun setCastlingRights() {
+        setCastlingRightsWhite()
+        setCastlingRightsBlack()
     }
 
     private fun castlingRightsToString(): String {
