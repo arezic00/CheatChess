@@ -4,6 +4,7 @@ import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.Button
 import androidx.lifecycle.lifecycleScope
 import com.example.cheatchess.databinding.ActivityMainBinding
@@ -54,6 +55,14 @@ class MainActivity : AppCompatActivity(), ChessDelegate {
             analyzePosition()
 
         }
+
+        binding.navView.setNavigationItemSelectedListener {
+            when(it.itemId) {
+                R.id.navItemBest -> setupBestMoveMode()
+                R.id.navItemEval -> setupEvalMode()
+            }
+            true
+        }
     }
 
     override fun pieceAt(row: Int, col: Int) = chessModel.pieceAt(row, col)
@@ -96,5 +105,21 @@ class MainActivity : AppCompatActivity(), ChessDelegate {
     private fun updateEvalBar(progress: Float) {
         val progressInt = ((progress + 10) * 5 ).toInt()
         binding.pbEvalBar.progress = progressInt
+    }
+
+    private fun setupBestMoveMode() {
+        binding.pbEvalBar.visibility = View.GONE
+        binding.tvEval.visibility = View.GONE
+        binding.btnAnalyze.visibility = View.GONE
+        binding.tvBestmove.visibility = View.VISIBLE
+        binding.btnBestmove.visibility = View.VISIBLE
+    }
+
+    private fun setupEvalMode() {
+        binding.tvBestmove.visibility = View.GONE
+        binding.btnBestmove.visibility = View.GONE
+        binding.pbEvalBar.visibility = View.VISIBLE
+        binding.tvEval.visibility = View.VISIBLE
+        binding.btnAnalyze.visibility = View.VISIBLE
     }
 }

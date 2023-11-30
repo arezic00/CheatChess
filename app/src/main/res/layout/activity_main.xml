@@ -1,88 +1,116 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<androidx.drawerlayout.widget.DrawerLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/drawerLayout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_gravity="center"
-    android:gravity="center"
-    android:orientation="vertical">
+    android:layout_height="match_parent" >
 
-    <com.example.cheatchess.ChessView
-        android:id="@+id/chessView"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent" >
+        <LinearLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:orientation="vertical">
 
-    </com.example.cheatchess.ChessView>
+            <com.example.cheatchess.ChessView
+                android:id="@+id/chessView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginHorizontal="5dp"
+                android:weightSum="3">
+                <Button
+                    android:id="@+id/btn_clear"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    app:cornerRadius="5dp"
+                    android:text="@string/clear" />
+                <Button
+                    android:id="@+id/btn_reset"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginHorizontal="5dp"
+                    app:cornerRadius="5dp"
+                    android:text="@string/reset" />
+                <Button
+                    android:id="@+id/btn_turn"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/white"
+                    app:cornerRadius="5dp"
+                    android:text="@string/turn"
+                    android:layout_weight="1"/>
 
+            </LinearLayout>
 
+            <ProgressBar
+                android:id="@+id/pb_evalBar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="5dp"
+                style="?android:progressBarStyleHorizontal"
+                android:progress="50"
+                android:progressDrawable="@drawable/linear_progress_bar"
+                android:indeterminate="false"/>
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginHorizontal="5dp">
+                <TextView
+                    android:id="@+id/tv_eval"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:text="Total evaluation: 0.0"
+                    android:textAlignment="center"/>
 
+                <Button
+                    android:id="@+id/btn_analyze"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginLeft="10dp"
+                    app:cornerRadius="5dp"
+                    android:text="@string/analyse" />
+            </LinearLayout>
+            <TextView
+                android:id="@+id/tv_bestmove"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Best move: "
+                android:visibility="gone" />
+            <Button
+                android:id="@+id/btn_bestmove"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:cornerRadius="5dp"
+                android:text="Best Move"
+                android:visibility="gone" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginHorizontal="5dp"
-        android:weightSum="3">
-        <Button
-            android:id="@+id/btn_clear"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            app:cornerRadius="5dp"
-            android:text="@string/clear" />
-        <Button
-            android:id="@+id/btn_reset"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_marginHorizontal="5dp"
-            app:cornerRadius="5dp"
-            android:text="@string/reset" />
-        <Button
-            android:id="@+id/btn_turn"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:textColor="@color/white"
-            app:cornerRadius="5dp"
-            android:text="@string/turn"
-            android:layout_weight="1"/>
+        </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-    </LinearLayout>
-
-    <ProgressBar
-        android:id="@+id/pb_evalBar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="5dp"
-        style="?android:progressBarStyleHorizontal"
-        android:progress="50"
-        android:progressDrawable="@drawable/linear_progress_bar"
-        android:indeterminate="false"/>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginHorizontal="5dp">
-        <TextView
-            android:id="@+id/tv_eval"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="2"
-            android:text="Total evaluation: 0.0"
-            android:textAlignment="center"/>
-
-        <Button
-            android:id="@+id/btn_analyze"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_marginLeft="10dp"
-            app:cornerRadius="5dp"
-            android:text="@string/analyse" />
-    </LinearLayout>
-</LinearLayout>
+    <com.google.android.material.navigation.NavigationView
+        android:id="@+id/navView"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        app:headerLayout="@layout/nav_header"
+        app:menu="@menu/nav_menu"
+        android:layout_gravity="start"
+        android:fitsSystemWindows="true" />
+</androidx.drawerlayout.widget.DrawerLayout>
 
