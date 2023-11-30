@@ -11,6 +11,7 @@ import com.example.cheatchess.databinding.ActivityMainBinding
 import kotlinx.coroutines.launch
 import okio.IOException
 import retrofit2.HttpException
+import retrofit2.Response
 
 class MainActivity : AppCompatActivity(), ChessDelegate {
     private lateinit var binding: ActivityMainBinding
@@ -55,6 +56,8 @@ class MainActivity : AppCompatActivity(), ChessDelegate {
             analyzePosition()
 
         }
+
+        setBestMoveBtnOnClickListener()
 
         binding.navView.setNavigationItemSelectedListener {
             when(it.itemId) {
@@ -121,5 +124,32 @@ class MainActivity : AppCompatActivity(), ChessDelegate {
         binding.pbEvalBar.visibility = View.VISIBLE
         binding.tvEval.visibility = View.VISIBLE
         binding.btnAnalyze.visibility = View.VISIBLE
+    }
+
+    private fun setBestMoveBtnOnClickListener() {
+        binding.btnBestmove.setOnClickListener {
+            lifecycleScope.launch {
+                val positionFEN = chessModel.positionToFEN()
+                val depth = "13"
+                val mode = "bestmove"
+                val options = mapOf(Pair("fen", positionFEN), Pair("depth", depth), Pair("mode", mode))
+
+                val response = try {
+                    RetrofitInstance.api.getStockfishEvaluation(options)
+                } catch (e: IOException) {
+                    Log.d("MainActivity", "IOException")
+                    return@launch
+                } catch (e: HttpException) {
+                    Log.d("MainActivity", "HttpException")
+                    return@launch
+                }
+                if (response.isSuccessful)
+                    response.body()?.let {
+                        binding.tvBestmove.text = it.data
+                    }
+
+
+            }
+        }
     }
 }
