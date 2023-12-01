@@ -7,11 +7,12 @@ import android.util.Log
 import android.view.View
 import android.widget.Button
 import androidx.lifecycle.lifecycleScope
+import com.example.cheatchess.Constants.CHAR_CODE_OFFSET
 import com.example.cheatchess.databinding.ActivityMainBinding
 import kotlinx.coroutines.launch
 import okio.IOException
 import retrofit2.HttpException
-import retrofit2.Response
+import kotlin.math.abs
 
 class MainActivity : AppCompatActivity(), ChessDelegate {
     private lateinit var binding: ActivityMainBinding
@@ -109,6 +110,19 @@ class MainActivity : AppCompatActivity(), ChessDelegate {
         return responseData.substring(9, responseData.length - 12)
     }
 
+    private fun existsLegalMove(responseData: String): Boolean {
+        return !(responseData.contains("none"))
+    }
+
+    private fun bestMoveToBoardIndexes(bestMove: String): Pair<Pair<Int,Int>,Pair<Int,Int>> {
+        val colStart = bestMove[0].code - CHAR_CODE_OFFSET
+        val rowStart = abs(bestMove[1].digitToInt() - 8)
+        val colEnd = bestMove[2].code - CHAR_CODE_OFFSET
+        val rowEnd = abs(bestMove[3].digitToInt() - 8)
+
+        return Pair(Pair(rowStart,colStart), Pair(rowEnd,colEnd))
+    }
+
     private fun updateEvalBar(progress: Float) {
         val progressInt = ((progress + 10) * 5 ).toInt()
         binding.pbEvalBar.progress = progressInt
@@ -149,8 +163,10 @@ class MainActivity : AppCompatActivity(), ChessDelegate {
                 }
                 if (response.isSuccessful)
                     response.body()?.let {
-                        binding.tvBestmove.text = it.data
-                        Log.d("MainActivity", ":${extractBestMove(it.data)}:")
+                        var move = "none"
+                        if (existsLegalMove(it.data))
+                            move = extractBestMove(it.data)
+                        binding.tvBestmove.text = getString(R.string.bestmove,move)
                     }
             }
         }
