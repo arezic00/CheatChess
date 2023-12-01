@@ -105,6 +105,10 @@ class MainActivity : AppCompatActivity(), ChessDelegate {
         return responseData.substring(18, responseData.length - 13).toFloat()
     }
 
+    private fun extractBestMove(responseData: String): String {
+        return responseData.substring(9, responseData.length - 12)
+    }
+
     private fun updateEvalBar(progress: Float) {
         val progressInt = ((progress + 10) * 5 ).toInt()
         binding.pbEvalBar.progress = progressInt
@@ -146,9 +150,8 @@ class MainActivity : AppCompatActivity(), ChessDelegate {
                 if (response.isSuccessful)
                     response.body()?.let {
                         binding.tvBestmove.text = it.data
+                        Log.d("MainActivity", ":${extractBestMove(it.data)}:")
                     }
-
-
             }
         }
     }
