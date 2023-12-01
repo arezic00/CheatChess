@@ -4,4 +4,5 @@
     <string name="reset">Reset</string>
     <string name="turn">Turn: W</string>
     <string name="analyse">Analyse</string>
+    <string name="bestmove">Best move: %1$s</string>
 </resources>

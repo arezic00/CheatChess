@@ -6,4 +6,5 @@ object Constants {
     val BOARD_RANGE = MIN_INDEX..MAX_INDEX
     const val OUTSIDE_INDEX_ABOVE = MIN_INDEX - 1
     const val OUTSIDE_INDEX_BELOW = MAX_INDEX + 1
+    const val CHAR_CODE_OFFSET = 97
 }

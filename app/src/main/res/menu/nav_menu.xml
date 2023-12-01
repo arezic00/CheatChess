@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/navItemBest"
+        android:title="Best Move Mode (Fast)" />
+    <item
+        android:id="@+id/navItemEval"
+        android:title="Eval Mode (Medium Speed)" />
+    <item
+        android:id="@+id/navItemAdvanced"
+        android:title="Advanced Mode (Slow)" />
+</menu>
