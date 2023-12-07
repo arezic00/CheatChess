@@ -10,6 +10,7 @@ import androidx.lifecycle.lifecycleScope
 import com.example.cheatchess.Constants.CHAR_CODE_OFFSET
 import com.example.cheatchess.databinding.ActivityMainBinding
 import kotlinx.coroutines.launch
+import okhttp3.internal.EMPTY_RESPONSE
 import okio.IOException
 import retrofit2.HttpException
 import retrofit2.Response
@@ -154,10 +155,10 @@ class MainActivity : AppCompatActivity(), ChessDelegate {
             RetrofitInstance.api.getStockfishEvaluation(options)
         } catch (e: IOException) {
             Log.d("MainActivity", "IOException")
-            return Response.success(404, StockfishEvaluation("errorString",false))
+            return Response.error(404, EMPTY_RESPONSE)
         } catch (e: HttpException) {
             Log.d("MainActivity", "HttpException")
-            return Response.success(404, StockfishEvaluation("errorString",false))
+            return Response.error(404, EMPTY_RESPONSE)
         }
     }
 }
