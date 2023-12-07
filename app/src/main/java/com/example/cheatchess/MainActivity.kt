@@ -10,8 +10,10 @@ import androidx.lifecycle.lifecycleScope
 import com.example.cheatchess.Constants.CHAR_CODE_OFFSET
 import com.example.cheatchess.databinding.ActivityMainBinding
 import kotlinx.coroutines.launch
+import okhttp3.internal.EMPTY_RESPONSE
 import okio.IOException
 import retrofit2.HttpException
+import retrofit2.Response
 import kotlin.math.abs
 
 class MainActivity : AppCompatActivity(), ChessDelegate {
@@ -78,27 +80,12 @@ class MainActivity : AppCompatActivity(), ChessDelegate {
 
     private fun analyzePosition() {
         lifecycleScope.launch {
-            val positionFEN = chessModel.positionToFEN()
-            val depth = "13"
-            val mode = "eval"
-            val options = mapOf(Pair("fen", positionFEN), Pair("depth", depth), Pair("mode", mode))
-
-            val response = try {
-                RetrofitInstance.api.getStockfishEvaluation(options)
-            } catch (e: IOException) {
-                Log.d("MainActivity", "IOException")
-                return@launch
-            } catch (e: HttpException) {
-                Log.d("MainActivity", "HttpException")
-                return@launch
-            }
+            val response = getStockfishResponse("eval")
             if (response.isSuccessful)
                 response.body()?.let {
                     binding.tvEval.text = it.data
                     updateEvalBar(extractEval(it.data))
                 }
-
-
         }
     }
 
@@ -147,20 +134,7 @@ class MainActivity : AppCompatActivity(), ChessDelegate {
     private fun setBestMoveBtnOnClickListener() {
         binding.btnBestmove.setOnClickListener {
             lifecycleScope.launch {
-                val positionFEN = chessModel.positionToFEN()
-                val depth = "13"
-                val mode = "bestmove"
-                val options = mapOf(Pair("fen", positionFEN), Pair("depth", depth), Pair("mode", mode))
-
-                val response = try {
-                    RetrofitInstance.api.getStockfishEvaluation(options)
-                } catch (e: IOException) {
-                    Log.d("MainActivity", "IOException")
-                    return@launch
-                } catch (e: HttpException) {
-                    Log.d("MainActivity", "HttpException")
-                    return@launch
-                }
+                val response = getStockfishResponse("bestmove")
                 if (response.isSuccessful)
                     response.body()?.let {
                         var move = "none"
@@ -169,6 +143,22 @@ class MainActivity : AppCompatActivity(), ChessDelegate {
                         binding.tvBestmove.text = getString(R.string.bestmove,move)
                     }
             }
+        }
+    }
+
+    private suspend fun getStockfishResponse(mode: String): Response<StockfishEvaluation> {
+        val positionFEN = chessModel.positionToFEN()
+        val depth = "13"
+        val options = mapOf(Pair("fen", positionFEN), Pair("depth", depth), Pair("mode", mode))
+
+        return try {
+            RetrofitInstance.api.getStockfishEvaluation(options)
+        } catch (e: IOException) {
+            Log.d("MainActivity", "IOException")
+            return Response.error(404, EMPTY_RESPONSE)
+        } catch (e: HttpException) {
+            Log.d("MainActivity", "HttpException")
+            return Response.error(404, EMPTY_RESPONSE)
         }
     }
 }
